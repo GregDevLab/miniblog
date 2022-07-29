@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="https://kit.fontawesome.com/503f79c2cc.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+    <h1>Liste d'articles</h1>
+    <a href="{{ path('article_new')}}" class="btn btn-primary my-4">Créer un article</a>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show mt-4">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">Titre</th>
+					<th scope="col">Extrait</th>
+					<th scope="col">Categorie</th>
+					<th scope="col">Date</th>
+					<th scope="col">supprimer</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for article in articles %}
+					<tr>
+						<th scope="row">{{ article.id }}</th>
+						<td>{{ article.title }}</td>
+						<td>{{article.content | slice(0, 100)}}...</td>
+						<td>{{article.category.name}}</td>
+						<td>{{ article.createdAt | date("d/m/Y")}}</td>
+						<td>
+                            <a href="{{ path('article_delete', {id: article.id})}}" class="btn btn-danger"> <i class="fa-solid fa-dumpster"></i></a>
+                        </td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<div class="navigation mt-4">
+			{{ knp_pagination_render(articles) }}
+		</div>
+	</div>
+{% endblock %}
